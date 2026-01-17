@@ -41,7 +41,7 @@
     "@fern-typescript/hono-error-generator": "workspace:*",
     "@fern-typescript/hono-error-schema-generator": "workspace:*",
     "@fern-typescript/hono-inlined-request-body-generator": "workspace:*",
-    "@fern-typescript/hono-inlined-request-schema-generator": "workspace:*",
+    "@fern-typescript/hono-inlined-request-body-schema-generator": "workspace:*",
     "@fern-typescript/hono-register-generator": "workspace:*",
     "@fern-typescript/hono-service-generator": "workspace:*",
     "@fern-typescript/generic-hono-error-generators": "workspace:*",
