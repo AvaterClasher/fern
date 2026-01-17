@@ -1,2 +1,2 @@
-export { Hono, HonoHttpVerb } from "./Hono";
+export type { Hono, HonoHttpVerb } from "./Hono";
 export { HonoImpl } from "./HonoImpl";

@@ -5,15 +5,16 @@ import { Hono, HonoHttpVerb } from "./Hono";
 
 export class HonoImpl extends ExternalDependency implements Hono {
     protected override PACKAGE = { name: "hono", version: "^4.11.4" };
+    protected override TYPES_PACKAGE = undefined;
 
     public readonly Hono = {
-        _instantiate: this.withNamedImport("hono", "Hono", (withImport, Hono) =>
+        _instantiate: this.withNamedImport("Hono", (withImport, Hono) =>
             withImport(() => {
                 return ts.factory.createNewExpression(ts.factory.createIdentifier(Hono), undefined, []);
             })
         ),
 
-        _getReferenceToType: this.withNamedImport("hono", "Hono", (withImport, Hono) =>
+        _getReferenceToType: this.withNamedImport("Hono", (withImport, Hono) =>
             withImport(() => {
                 return ts.factory.createTypeReferenceNode(ts.factory.createIdentifier(Hono), []);
             })
@@ -71,21 +72,21 @@ export class HonoImpl extends ExternalDependency implements Hono {
     };
 
     public readonly Context = {
-        _getReferenceToType: this.withNamedImport("hono", "Context", (withImport, Context) =>
+        _getReferenceToType: this.withNamedImport("Context", (withImport, Context) =>
             withImport(() => {
                 return ts.factory.createTypeReferenceNode(ts.factory.createIdentifier(Context), []);
             })
         )
     };
 
-    public readonly MiddlewareHandler = this.withNamedImport("hono", "MiddlewareHandler", (withImport, MiddlewareHandler) =>
+    public readonly MiddlewareHandler = this.withNamedImport("MiddlewareHandler", (withImport, MiddlewareHandler) =>
         withImport(() => {
             return ts.factory.createTypeReferenceNode(ts.factory.createIdentifier(MiddlewareHandler), []);
         })
     );
 
     public readonly CookieOptions = {
-        _getReferenceToType: this.withNamedImport("hono/utils/cookie", "CookieOptions", (withImport, CookieOptions) =>
+        _getReferenceToType: this.withNamedImport("CookieOptions", (withImport, CookieOptions) =>
             withImport(() => {
                 return ts.factory.createTypeReferenceNode(ts.factory.createIdentifier(CookieOptions), []);
             })

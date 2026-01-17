@@ -1,2 +1,2 @@
-export { GeneratedHonoInlinedRequestBodySchema } from "./GeneratedHonoInlinedRequestBodySchema";
-export { HonoInlinedRequestBodySchemaContext } from "./HonoInlinedRequestBodySchemaContext";
+export type { GeneratedHonoInlinedRequestBodySchema } from "./GeneratedHonoInlinedRequestBodySchema";
+export type { HonoInlinedRequestBodySchemaContext } from "./HonoInlinedRequestBodySchemaContext";

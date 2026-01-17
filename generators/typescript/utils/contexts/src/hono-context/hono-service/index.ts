@@ -1,2 +1,2 @@
-export { GeneratedHonoService } from "./GeneratedHonoService";
-export { HonoServiceContext } from "./HonoServiceContext";
+export type { GeneratedHonoService } from "./GeneratedHonoService";
+export type { HonoServiceContext } from "./HonoServiceContext";

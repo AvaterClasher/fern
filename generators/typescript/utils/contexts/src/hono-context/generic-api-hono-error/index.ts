@@ -1,2 +1,2 @@
-export { GeneratedGenericAPIHonoError } from "./GeneratedGenericAPIHonoError";
-export { GenericAPIHonoErrorContext } from "./GenericAPIHonoErrorContext";
+export type { GeneratedGenericAPIHonoError } from "./GeneratedGenericAPIHonoError";
+export type { GenericAPIHonoErrorContext } from "./GenericAPIHonoErrorContext";

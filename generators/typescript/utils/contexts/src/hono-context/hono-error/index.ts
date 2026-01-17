@@ -1,2 +1,2 @@
-export { GeneratedHonoError } from "./GeneratedHonoError";
-export { HonoErrorContext } from "./HonoErrorContext";
+export type { GeneratedHonoError } from "./GeneratedHonoError";
+export type { HonoErrorContext } from "./HonoErrorContext";

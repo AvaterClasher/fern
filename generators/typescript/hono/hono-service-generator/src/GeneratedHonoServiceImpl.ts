@@ -868,7 +868,7 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
                               context.honoEndpointTypeSchemas
                                   .getGeneratedEndpointTypeSchemas(this.packageId, endpoint.name)
                                   .serializeResponse(ts.factory.createIdentifier(RESPONSE_BODY_VARIABLE), context),
-                              ts.factory.createNumericLiteral(endpoint.response.statusCode)
+                              ts.factory.createNumericLiteral(endpoint.response.statusCode ?? 200)
                           ]
                       )
                     : ts.factory.createCallExpression(

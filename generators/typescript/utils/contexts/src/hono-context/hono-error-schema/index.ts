@@ -1,2 +1,2 @@
-export { GeneratedHonoErrorSchema } from "./GeneratedHonoErrorSchema";
-export { HonoErrorSchemaContext } from "./HonoErrorSchemaContext";
+export type { GeneratedHonoErrorSchema } from "./GeneratedHonoErrorSchema";
+export type { HonoErrorSchemaContext } from "./HonoErrorSchemaContext";

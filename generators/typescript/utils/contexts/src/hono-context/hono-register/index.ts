@@ -1,2 +1,2 @@
-export { GeneratedHonoRegister } from "./GeneratedHonoRegister";
-export { HonoRegisterContext } from "./HonoRegisterContext";
+export type { GeneratedHonoRegister } from "./GeneratedHonoRegister";
+export type { HonoRegisterContext } from "./HonoRegisterContext";

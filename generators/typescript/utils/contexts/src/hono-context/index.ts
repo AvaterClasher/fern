@@ -6,4 +6,4 @@ export * from "./hono-inlined-request-body";
 export * from "./hono-inlined-request-body-schema";
 export * from "./hono-register";
 export * from "./hono-service";
-export { HonoContext } from "./HonoContext";
+export type { HonoContext } from "./HonoContext";
