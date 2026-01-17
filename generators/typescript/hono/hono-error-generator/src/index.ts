@@ -1,0 +1,1 @@
+export { HonoErrorGenerator } from "./HonoErrorGenerator";

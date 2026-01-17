@@ -1,0 +1,1 @@
+export { HonoRegisterGenerator } from "./HonoRegisterGenerator";

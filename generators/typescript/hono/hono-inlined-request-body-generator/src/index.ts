@@ -1,0 +1,1 @@
+export { HonoInlinedRequestBodyGenerator } from "./HonoInlinedRequestBodyGenerator";

@@ -1,0 +1,1 @@
+export { HonoServiceGenerator } from "./HonoServiceGenerator";
