@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@fern-fern/ir-sdk": "^63.0.0",
+    "@fern-typescript/abstract-error-class-generator": "workspace:*",
     "@fern-typescript/commons": "workspace:*",
     "@fern-typescript/contexts": "workspace:*",
     "@fern-typescript/resolvers": "workspace:*",

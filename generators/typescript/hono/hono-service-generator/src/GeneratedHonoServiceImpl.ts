@@ -96,7 +96,7 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
 
         this.addAddMiddlewareMethod({ serviceClass, context });
 
-        serviceClass.addMethod({
+        const toHonoMethod = serviceClass.addMethod({
             scope: Scope.Public,
             name: GeneratedHonoServiceImpl.TO_HONO_METHOD_NAME,
             returnType: getTextOfTsNode(context.externalDependencies.hono.Hono._getReferenceToType()),
@@ -110,6 +110,8 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
                 )
             ].map(getTextOfTsNode)
         });
+
+        toHonoMethod.addJsDoc("Returns the Hono app instance with all routes configured.");
     }
 
     private addConstructor(serviceClass: ClassDeclaration, context: HonoContext) {
@@ -204,7 +206,7 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
 
         const allPathParameters = [...this.service.pathParameters, ...endpoint.pathParameters];
 
-        methodsInterface.addMethod({
+        const method = methodsInterface.addMethod({
             name: this.getEndpointMethodName(endpoint),
             parameters: [
                 {
@@ -351,6 +353,9 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
                 ])
             )
         });
+
+        // Add documentation to the method
+        maybeAddDocsNode(method, endpoint.docs);
     }
 
     private addAddMiddlewareMethod({
@@ -362,7 +367,7 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
     }) {
         const HANDLER_PARAMETER_NAME = "handler";
 
-        serviceClass.addMethod({
+        const method = serviceClass.addMethod({
             scope: Scope.Public,
             name: GeneratedHonoServiceImpl.ADD_MIDDLEWARE_METHOD_NAME,
             parameters: [
@@ -386,6 +391,8 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
                 ts.factory.createReturnStatement(ts.factory.createThis())
             ].map(getTextOfTsNode)
         });
+
+        method.addJsDoc("Adds middleware to the Hono app for all routes.");
     }
 
     private getEndpointMethodName(endpoint: HttpEndpoint): string {
@@ -820,7 +827,7 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
         );
 
         // Set cookies if any were added
-        // Add import for setCookie from hono/cookie
+        // Only add import for setCookie when we actually use it
         context.importsManager.addImport("hono/cookie", { namedImports: ["setCookie"] });
 
         statements.push(
@@ -1073,26 +1080,14 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
         context: HonoContext;
     }): ts.Expression {
         return HttpRequestBody._visit(requestBodyType, {
-            inlinedRequestBody: () => {
-                if (this.skipRequestValidation) {
-                    return context.honoInlinedRequestBodySchema
-                        .getGeneratedInlinedRequestBodySchema(this.packageId, endpoint.name)
-                        .deserializeRequest(referenceToBody, context);
-                }
-                return context.honoInlinedRequestBodySchema
+            inlinedRequestBody: () =>
+                context.honoInlinedRequestBodySchema
                     .getGeneratedInlinedRequestBodySchema(this.packageId, endpoint.name)
-                    .deserializeRequest(referenceToBody, context);
-            },
-            reference: () => {
-                if (this.skipRequestValidation) {
-                    return context.honoEndpointTypeSchemas
-                        .getGeneratedEndpointTypeSchemas(this.packageId, endpoint.name)
-                        .deserializeRequest(referenceToBody, context);
-                }
-                return context.honoEndpointTypeSchemas
+                    .deserializeRequest(referenceToBody, context),
+            reference: () =>
+                context.honoEndpointTypeSchemas
                     .getGeneratedEndpointTypeSchemas(this.packageId, endpoint.name)
-                    .deserializeRequest(referenceToBody, context);
-            },
+                    .deserializeRequest(referenceToBody, context),
             fileUpload: () => {
                 throw new Error("File upload is not supported");
             },

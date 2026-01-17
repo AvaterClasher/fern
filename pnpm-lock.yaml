@@ -3007,6 +3007,9 @@ importers:
       '@fern-fern/ir-sdk':
         specifier: ^63.0.0
         version: 63.0.0
+      '@fern-typescript/abstract-error-class-generator':
+        specifier: workspace:*
+        version: link:../../utils/abstract-error-class-generator
       '@fern-typescript/commons':
         specifier: workspace:*
         version: link:../../utils/commons
@@ -3038,6 +3041,9 @@ importers:
 
   generators/typescript/hono/hono-endpoint-type-schemas-generator:
     dependencies:
+      '@fern-api/core-utils':
+        specifier: workspace:*
+        version: link:../../../../packages/commons/core-utils
       '@fern-fern/ir-sdk':
         specifier: ^63.0.0
         version: 63.0.0
@@ -3075,6 +3081,9 @@ importers:
       '@fern-fern/ir-sdk':
         specifier: ^63.0.0
         version: 63.0.0
+      '@fern-typescript/abstract-error-class-generator':
+        specifier: workspace:*
+        version: link:../../utils/abstract-error-class-generator
       '@fern-typescript/commons':
         specifier: workspace:*
         version: link:../../utils/commons
@@ -3106,6 +3115,9 @@ importers:
 
   generators/typescript/hono/hono-error-schema-generator:
     dependencies:
+      '@fern-api/core-utils':
+        specifier: workspace:*
+        version: link:../../../../packages/commons/core-utils
       '@fern-fern/ir-sdk':
         specifier: ^63.0.0
         version: 63.0.0
@@ -3220,6 +3232,9 @@ importers:
       '@fern-typescript/resolvers':
         specifier: workspace:*
         version: link:../../utils/resolvers
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       ts-morph:
         specifier: ^27.0.2
         version: 27.0.2
@@ -3227,6 +3242,9 @@ importers:
       '@fern-api/configs':
         specifier: workspace:*
         version: link:../../../../packages/configs
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
       '@types/node':
         specifier: 18.15.3
         version: 18.15.3
