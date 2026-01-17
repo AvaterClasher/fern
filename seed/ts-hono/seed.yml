@@ -1,0 +1,84 @@
+irVersion: v61
+displayName: TypeScript Hono
+changelogLocation: ../../generators/typescript/hono/versions.yml
+image: fernapi/fern-typescript-hono
+
+buildScripts:
+  installScript:
+    commands:
+      - yarn install
+  compileScript:
+    commands:
+      - yarn build
+
+publish:
+  preBuildCommands:
+    - pnpm turbo run dist:cli --filter @fern-typescript/hono-generator-cli
+  docker:
+    file: ./generators/typescript/hono/cli/Dockerfile
+    image: fernapi/fern-typescript-hono
+    context: .
+test:
+  docker:
+    image: fernapi/fern-typescript-hono:latest
+    command:
+      - pnpm turbo run dockerTagLatest --filter @fern-typescript/hono-generator-cli
+  podman:
+    image: fernapi/fern-typescript-hono:latest
+    command:
+      - pnpm turbo run podmanTagLatest --filter @fern-typescript/hono-generator-cli
+  local:
+    workingDirectory: generators/typescript
+    buildCommand:
+      - pnpm turbo run dist:cli --filter @fern-typescript/hono-generator-cli
+    runCommand: node --enable-source-maps hono/cli/dist/cli.cjs {CONFIG_PATH}
+    env:
+      NODE_ENV: test
+
+language: typescript
+generatorType: Server
+defaultOutputMode: local_files
+defaultCustomConfig:
+  outputSourceFiles: true
+fixtures:
+  imdb:
+    - customConfig: null
+      outputFolder: no-custom-config
+    - customConfig:
+        outputSourceFiles: false
+      outputFolder: output-compiled
+    - customConfig:
+        skipRequestValidation: true
+      outputFolder: skip-request-validation
+    - customConfig:
+        skipResponseValidation: true
+      outputFolder: skip-response-validation
+    - customConfig:
+        allowExtraFields: true
+      outputFolder: allow-extra-fields
+  exhaustive:
+    - customConfig: null
+      outputFolder: no-custom-config
+    - customConfig:
+        retainOriginalCasing: true
+      outputFolder: retain-original-casing
+    - customConfig:
+        noOptionalProperties: true
+      outputFolder: no-optional-properties
+    - customConfig:
+        doNotHandleUnrecognizedErrors: true
+      outputFolder: no-error-handling
+allowedFailures:
+  - bytes-download
+  - bytes-upload
+  - file-download
+  - file-upload
+  - file-upload-openapi
+  - multiple-request-bodies
+  - plain-text
+  - public-object
+  - server-sent-event-examples
+  - server-sent-events
+  - streaming
+  - streaming-parameter
+  - enum
