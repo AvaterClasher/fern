@@ -1,24 +1,46 @@
-import { Reference } from "@fern-typescript/commons";
 import { HttpService, ServiceId } from "@fern-fern/ir-sdk/api";
-import { ts } from "ts-morph";
+import { ExportedFilePath, PackageId, Reference } from "@fern-typescript/commons";
+
+import { AbstractHonoServiceDeclarationReferencer } from "./AbstractHonoServiceDeclarationReferencer";
+import { DeclarationReferencer } from "./DeclarationReferencer";
 
 export declare namespace HonoServiceDeclarationReferencer {
-    export interface Init {}
+    export interface Init extends AbstractHonoServiceDeclarationReferencer.Init {}
 }
 
-export class HonoServiceDeclarationReferencer {
-    constructor(private readonly init: HonoServiceDeclarationReferencer.Init) {}
-
-    public getExportedName(serviceId: ServiceId): string {
-        return "HonoService";
+export class HonoServiceDeclarationReferencer extends AbstractHonoServiceDeclarationReferencer<{
+    serviceId: ServiceId;
+    service: HttpService;
+}> {
+    constructor(init: HonoServiceDeclarationReferencer.Init) {
+        super(init);
     }
 
-    public getReferenceToService(args: { service: HttpService; serviceId: ServiceId }): Reference {
-        const name = this.getExportedName(args.serviceId);
+    public getExportedFilepath(name: { serviceId: ServiceId; service: HttpService }): ExportedFilePath {
         return {
-            getExpression: () => ts.factory.createIdentifier(name),
-            getTypeNode: () => ts.factory.createTypeReferenceNode(name, undefined),
-            getEntityName: () => ts.factory.createIdentifier(name)
+            directories: [...this.getExportedDirectory(name)],
+            file: {
+                nameOnDisk: this.getFilename(name)
+            }
         };
+    }
+
+    public getFilename(name: { serviceId: ServiceId; service: HttpService }): string {
+        return `${this.getExportedNameOfService(name)}.ts`;
+    }
+
+    public getExportedNameOfService(name: { serviceId: ServiceId; service: HttpService }): string {
+        return `${name.service.name.pascalCase.safeName}Service`;
+    }
+
+    public getReferenceToService(args: DeclarationReferencer.getReferenceTo.Options<{
+        serviceId: ServiceId;
+        service: HttpService;
+    }>): Reference {
+        return this.getReferenceTo(this.getExportedNameOfService(args.name), args);
+    }
+
+    protected getPackageIdFromName(name: { serviceId: ServiceId; service: HttpService }): PackageId {
+        return name.service.name.fernFilepath.packagePath;
     }
 }

@@ -1,23 +1,25 @@
-import { Reference } from "@fern-typescript/commons";
-import { ts } from "ts-morph";
+import { ExportedFilePath } from "@fern-typescript/commons";
 
-export declare namespace HonoRegisterDeclarationReferencer {
-    export interface Init {}
-}
+import { AbstractDeclarationReferencer } from "./AbstractDeclarationReferencer";
 
-export class HonoRegisterDeclarationReferencer {
-    constructor(private readonly init: HonoRegisterDeclarationReferencer.Init) {}
-
-    public getExportedName(): string {
-        return "register";
+export class HonoRegisterDeclarationReferencer extends AbstractDeclarationReferencer {
+    public getExportedFilepath(): ExportedFilePath {
+        return {
+            directories: [...this.containingDirectory],
+            file: {
+                nameOnDisk: this.getFilename(),
+                exportDeclaration: {
+                    namedExports: [this.getRegisterFunctionName()]
+                }
+            }
+        };
     }
 
-    public getReferenceToRegister(): Reference {
-        const name = this.getExportedName();
-        return {
-            getExpression: () => ts.factory.createIdentifier(name),
-            getTypeNode: () => ts.factory.createTypeReferenceNode(name, undefined),
-            getEntityName: () => ts.factory.createIdentifier(name)
-        };
+    public getFilename(): string {
+        return `${this.getRegisterFunctionName()}.ts`;
+    }
+
+    public getRegisterFunctionName(): string {
+        return "register";
     }
 }

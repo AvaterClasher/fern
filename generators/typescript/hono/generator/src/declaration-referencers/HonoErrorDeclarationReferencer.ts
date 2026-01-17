@@ -1,24 +1,46 @@
-import { Reference } from "@fern-typescript/commons";
-import { ErrorDeclaration, ErrorId } from "@fern-fern/ir-sdk/api";
-import { ts } from "ts-morph";
+import { RelativeFilePath } from "@fern-api/fs-utils";
+import { DeclaredErrorName } from "@fern-fern/ir-sdk/api";
+import { ExportedFilePath, getExportedDirectoriesForFernFilepath, Reference } from "@fern-typescript/commons";
 
-export declare namespace HonoErrorDeclarationReferencer {
-    export interface Init {}
-}
+import { AbstractDeclarationReferencer } from "./AbstractDeclarationReferencer";
+import { DeclarationReferencer } from "./DeclarationReferencer";
 
-export class HonoErrorDeclarationReferencer {
-    constructor(private readonly init: HonoErrorDeclarationReferencer.Init) {}
+export const ERRORS_DIRECTORY_NAME = "errors";
 
-    public getExportedName(errorId: ErrorId): string {
-        return "HonoError";
+export class HonoErrorDeclarationReferencer extends AbstractDeclarationReferencer<DeclaredErrorName> {
+    public getExportedFilepath(errorName: DeclaredErrorName): ExportedFilePath {
+        return {
+            directories: [
+                ...this.containingDirectory,
+                ...getExportedDirectoriesForFernFilepath({
+                    fernFilepath: errorName.fernFilepath,
+                    subExports: {
+                        [RelativeFilePath.of(ERRORS_DIRECTORY_NAME)]: {
+                            exportAll: true
+                        }
+                    }
+                }),
+                {
+                    nameOnDisk: ERRORS_DIRECTORY_NAME,
+                    exportDeclaration: { exportAll: true }
+                }
+            ],
+            file: {
+                nameOnDisk: this.getFilename(errorName),
+                exportDeclaration: { exportAll: true }
+            }
+        };
     }
 
-    public getReferenceToError(args: { error: ErrorDeclaration; errorId: ErrorId }): Reference {
-        const name = this.getExportedName(args.errorId);
-        return {
-            getExpression: () => ts.factory.createIdentifier(name),
-            getTypeNode: () => ts.factory.createTypeReferenceNode(name, undefined),
-            getEntityName: () => ts.factory.createIdentifier(name)
-        };
+    public getFilename(errorName: DeclaredErrorName): string {
+        return `${this.getExportedName(errorName)}.ts`;
+    }
+
+    public getExportedName(errorName: DeclaredErrorName): string {
+        return errorName.name.pascalCase.unsafeName;
+    }
+
+    public getReferenceToError(args: DeclarationReferencer.getReferenceTo.Options<DeclaredErrorName>): Reference {
+        return this.getReferenceTo(this.getExportedName(args.name), args);
     }
 }
