@@ -245,10 +245,11 @@ export class HonoGenerator {
             useBigInt: config.useBigInt,
             includeSerdeLayer: config.includeSerdeLayer
         });
-        this.honoInlinedRequestBodyGenerator = new HonoInlinedRequestBodyGenerator();
+        this.honoInlinedRequestBodyGenerator = new HonoInlinedRequestBodyGenerator({});
         this.honoInlinedRequestBodySchemaGenerator = new HonoInlinedRequestBodySchemaGenerator({
             includeSerdeLayer: config.includeSerdeLayer,
-            skipRequestValidation: config.skipRequestValidation
+            skipRequestValidation: config.skipRequestValidation,
+            allowExtraFields: config.allowExtraFields
         });
         this.honoEndpointTypeSchemasGenerator = new HonoEndpointTypeSchemasGenerator({
             includeSerdeLayer: config.includeSerdeLayer,
@@ -271,7 +272,9 @@ export class HonoGenerator {
             areImplementationsOptional: config.areImplementationsOptional
         });
         this.genericApiHonoErrorGenerator = new GenericAPIHonoErrorGenerator();
-        this.honoErrorGenerator = new HonoErrorGenerator();
+        this.honoErrorGenerator = new HonoErrorGenerator({
+            includeSerdeLayer: config.includeSerdeLayer
+        });
         this.honoErrorSchemaGenerator = new HonoErrorSchemaGenerator({
             includeSerdeLayer: config.includeSerdeLayer,
             allowExtraFields: config.allowExtraFields
