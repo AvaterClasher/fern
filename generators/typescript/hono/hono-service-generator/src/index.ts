@@ -1,1 +1,1 @@
-export { HonoServiceGenerator } from "./HonoServiceGenerator";
+export { GeneratedHonoServiceImpl } from "./GeneratedHonoServiceImpl";
