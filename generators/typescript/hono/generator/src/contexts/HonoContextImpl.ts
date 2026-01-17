@@ -32,6 +32,7 @@ export class HonoContextImpl implements GeneratorContext {
     public readonly coreUtilities: CoreUtilities;
     public readonly fernConstants: Constants;
     public readonly exportsManager: ExportsManager;
+    public readonly importsManager: ImportsManager;
 
     constructor({
         logger,
@@ -46,6 +47,7 @@ export class HonoContextImpl implements GeneratorContext {
         this.version = undefined;
         this.sourceFile = sourceFile;
         this.exportsManager = exportsManager;
+        this.importsManager = importsManager;
         this.fernConstants = fernConstants;
 
         this.externalDependencies = createExternalDependencies({

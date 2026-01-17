@@ -820,6 +820,9 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
         );
 
         // Set cookies if any were added
+        // Add import for setCookie from hono/cookie
+        context.importsManager.addImport("hono/cookie", { namedImports: ["setCookie"] });
+
         statements.push(
             ts.factory.createForOfStatement(
                 undefined,

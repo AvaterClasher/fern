@@ -1,3 +1,5 @@
+import { ImportsManager } from "@fern-typescript/commons";
+
 import { BaseContext } from "../base-context";
 import { GenericAPIHonoErrorContext } from "./generic-api-hono-error";
 import { HonoEndpointTypeSchemasContext } from "./hono-endpoint-type-schemas";
@@ -9,6 +11,7 @@ import { HonoRegisterContext } from "./hono-register";
 import { HonoServiceContext } from "./hono-service";
 
 export interface HonoContext extends BaseContext {
+    importsManager: ImportsManager;
     honoEndpointTypeSchemas: HonoEndpointTypeSchemasContext;
     honoError: HonoErrorContext;
     honoErrorSchema: HonoErrorSchemaContext;
