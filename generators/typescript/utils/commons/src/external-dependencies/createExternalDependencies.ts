@@ -4,6 +4,7 @@ import { BlobImpl } from "./blob/BlobImpl";
 import { ExternalDependencies } from "./ExternalDependencies";
 import { ExpressImpl } from "./express/ExpressImpl";
 import { FsImpl } from "./fs/FsImpl";
+import { HonoImpl } from "./hono/HonoImpl";
 import { StreamImpl } from "./stream/StreamImpl";
 
 export declare namespace createExternalDependencies {
@@ -19,6 +20,7 @@ export function createExternalDependencies({
 }: createExternalDependencies.Args): ExternalDependencies {
     return {
         express: new ExpressImpl({ importsManager, dependencyManager }),
+        hono: new HonoImpl({ importsManager, dependencyManager }),
         fs: new FsImpl({ importsManager, dependencyManager }),
         stream: new StreamImpl({ importsManager, dependencyManager }),
         blob: new BlobImpl({ importsManager, dependencyManager })
