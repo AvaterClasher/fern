@@ -1,11 +1,19 @@
+import { GeneratedGenericAPIHonoError } from "@fern-typescript/contexts";
+
+import { GeneratedGenericAPIHonoErrorImpl } from "./GeneratedGenericAPIHonoErrorImpl";
+
 export declare namespace GenericAPIHonoErrorGenerator {
-    export interface Init {}
+    export namespace generateGenericAPIHonoError {
+        export interface Args {
+            errorClassName: string;
+        }
+    }
 }
 
 export class GenericAPIHonoErrorGenerator {
-    constructor(private readonly init: GenericAPIHonoErrorGenerator.Init) {}
-
-    public doGenerate(): void {
-        // Stub implementation
+    public generateGenericAPIHonoError({
+        errorClassName
+    }: GenericAPIHonoErrorGenerator.generateGenericAPIHonoError.Args): GeneratedGenericAPIHonoError {
+        return new GeneratedGenericAPIHonoErrorImpl({ errorClassName });
     }
 }
