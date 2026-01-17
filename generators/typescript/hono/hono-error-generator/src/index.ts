@@ -1,1 +1,1 @@
-export { HonoErrorGenerator } from "./HonoErrorGenerator";
+export { GeneratedHonoErrorImpl } from "./GeneratedHonoErrorImpl";

@@ -1,1 +1,1 @@
-export { GenericAPIHonoErrorGenerator } from "./GenericAPIHonoErrorGenerator";
+export { GeneratedGenericAPIHonoErrorImpl } from "./GeneratedGenericAPIHonoErrorImpl";
