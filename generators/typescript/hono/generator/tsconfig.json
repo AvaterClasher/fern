@@ -1,0 +1,65 @@
+{
+  "extends": "@fern-api/configs/tsconfig/main.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "include": ["./src/**/*"],
+  "references": [
+    {
+      "path": "../../../../packages/cli/logger"
+    },
+    {
+      "path": "../../../../packages/commons/core-utils"
+    },
+    {
+      "path": "../../../../packages/commons/fs-utils"
+    },
+    {
+      "path": "../../model/type-generator"
+    },
+    {
+      "path": "../../model/type-reference-converters"
+    },
+    {
+      "path": "../../model/type-reference-example-generator"
+    },
+    {
+      "path": "../../model/type-schema-generator"
+    },
+    {
+      "path": "../../utils/commons"
+    },
+    {
+      "path": "../../utils/contexts"
+    },
+    {
+      "path": "../../utils/resolvers"
+    },
+    {
+      "path": "../hono-endpoint-type-schemas-generator"
+    },
+    {
+      "path": "../hono-error-generator"
+    },
+    {
+      "path": "../hono-error-schema-generator"
+    },
+    {
+      "path": "../hono-inlined-request-body-generator"
+    },
+    {
+      "path": "../hono-inlined-request-body-schema-generator"
+    },
+    {
+      "path": "../hono-register-generator"
+    },
+    {
+      "path": "../hono-service-generator"
+    },
+    {
+      "path": "../generic-hono-error-generators"
+    }
+  ]
+}
