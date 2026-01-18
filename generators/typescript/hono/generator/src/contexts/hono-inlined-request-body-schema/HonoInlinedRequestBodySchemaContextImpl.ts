@@ -2,7 +2,7 @@ import { Name } from "@fern-fern/ir-sdk/api";
 import { ExportsManager, ImportsManager, PackageId, Reference } from "@fern-typescript/commons";
 import {
     HonoInlinedRequestBodySchemaContext,
-    GeneratedExpressInlinedRequestBodySchema
+    GeneratedHonoInlinedRequestBodySchema
 } from "@fern-typescript/contexts";
 import { ExpressInlinedRequestBodySchemaGenerator } from "@fern-typescript/hono-inlined-request-body-schema-generator";
 import { PackageResolver } from "@fern-typescript/resolvers";
@@ -49,7 +49,7 @@ export class HonoInlinedRequestBodySchemaContextImpl implements HonoInlinedReque
     public getGeneratedInlinedRequestBodySchema(
         packageId: PackageId,
         endpointName: Name
-    ): GeneratedExpressInlinedRequestBodySchema {
+    ): GeneratedHonoInlinedRequestBodySchema {
         const serviceDeclaration = this.packageResolver.getServiceDeclarationOrThrow(packageId);
         const endpoint = serviceDeclaration.endpoints.find(
             (endpoint) => endpoint.name.originalName === endpointName.originalName

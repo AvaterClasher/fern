@@ -1,6 +1,6 @@
 import { Name } from "@fern-fern/ir-sdk/api";
 import { ExportsManager, ImportsManager, PackageId, Reference } from "@fern-typescript/commons";
-import { HonoInlinedRequestBodyContext, GeneratedExpressInlinedRequestBody } from "@fern-typescript/contexts";
+import { HonoInlinedRequestBodyContext, GeneratedHonoInlinedRequestBody } from "@fern-typescript/contexts";
 import { HonoInlinedRequestBodyGenerator } from "@fern-typescript/hono-inlined-request-body-generator";
 import { PackageResolver } from "@fern-typescript/resolvers";
 import { SourceFile } from "ts-morph";
@@ -53,7 +53,7 @@ export class HonoInlinedRequestBodyContextImpl implements HonoInlinedRequestBody
     public getGeneratedInlinedRequestBody(
         packageId: PackageId,
         endpointName: Name
-    ): GeneratedExpressInlinedRequestBody {
+    ): GeneratedHonoInlinedRequestBody {
         const serviceDeclaration = this.packageResolver.getServiceDeclarationOrThrow(packageId);
         const endpoint = serviceDeclaration.endpoints.find(
             (endpoint) => endpoint.name.originalName === endpointName.originalName

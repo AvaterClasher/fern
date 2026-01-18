@@ -1,6 +1,6 @@
 import { Name } from "@fern-fern/ir-sdk/api";
 import { ExportsManager, ImportsManager, PackageId, Reference } from "@fern-typescript/commons";
-import { HonoEndpointTypeSchemasContext, GeneratedExpressEndpointTypeSchemas } from "@fern-typescript/contexts";
+import { HonoEndpointTypeSchemasContext, GeneratedHonoEndpointTypeSchemas } from "@fern-typescript/contexts";
 import { HonoEndpointTypeSchemasGenerator } from "@fern-typescript/hono-endpoint-type-schemas-generator";
 import { PackageResolver } from "@fern-typescript/resolvers";
 import { SourceFile } from "ts-morph";
@@ -46,7 +46,7 @@ export class HonoEndpointTypeSchemasContextImpl implements HonoEndpointTypeSchem
     public getGeneratedEndpointTypeSchemas(
         packageId: PackageId,
         endpointName: Name
-    ): GeneratedExpressEndpointTypeSchemas {
+    ): GeneratedHonoEndpointTypeSchemas {
         const serviceDeclaration = this.packageResolver.getServiceDeclarationOrThrow(packageId);
         const endpoint = serviceDeclaration.endpoints.find(
             (endpoint) => endpoint.name.originalName === endpointName.originalName
