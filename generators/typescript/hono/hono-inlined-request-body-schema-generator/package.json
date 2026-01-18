@@ -1,5 +1,5 @@
 {
-  "name": "@fern-typescript/hono-inlined-request-schema-generator",
+  "name": "@fern-typescript/hono-inlined-request-body-schema-generator",
   "version": "0.0.0",
   "repository": {
     "type": "git",
