@@ -245,7 +245,7 @@ export class HonoGenerator {
             useBigInt: config.useBigInt,
             includeSerdeLayer: config.includeSerdeLayer
         });
-        this.honoInlinedRequestBodyGenerator = new HonoInlinedRequestBodyGenerator({});
+        this.honoInlinedRequestBodyGenerator = new HonoInlinedRequestBodyGenerator();
         this.honoInlinedRequestBodySchemaGenerator = new HonoInlinedRequestBodySchemaGenerator({
             includeSerdeLayer: config.includeSerdeLayer,
             skipRequestValidation: config.skipRequestValidation,
@@ -368,20 +368,20 @@ export class HonoGenerator {
                         sourceFile,
                         importsManager
                     });
-                    context.typeSchema.getSchemaOfNamedType(typeDeclaration.name, { isGeneratingSchema: false }).writeSchemaToFile(context);
+                    context.typeSchema.getGeneratedTypeSchema(typeDeclaration.name).writeToFile(context);
                 }
             });
         }
     }
 
     private generateInlinedRequestBodies() {
-        for (const service of Object.values(this.intermediateRepresentation.services)) {
+        this.forEachService((service, packageId) => {
             for (const endpoint of service.endpoints) {
                 if (endpoint.requestBody?.type === "inlinedRequestBody") {
                     this.withSourceFile({
                         filepath: this.honoInlinedRequestBodyDeclarationReferencer.getExportedFilepath({
-                            packageId: service.name.fernFilepath.packagePath,
-                            endpoint: endpoint.name
+                            packageId,
+                            endpoint
                         }),
                         run: ({ sourceFile, importsManager }) => {
                             const context = this.generateHonoContext({
@@ -390,23 +390,23 @@ export class HonoGenerator {
                                 importsManager
                             });
                             context.honoInlinedRequestBody
-                                .getGeneratedInlinedRequestBody(service.name.fernFilepath.packagePath, endpoint.name)
+                                .getGeneratedInlinedRequestBody(packageId, endpoint.name)
                                 .writeToFile(context);
                         }
                     });
                 }
             }
-        }
+        });
     }
 
     private generateInlinedRequestBodySchemas() {
-        for (const service of Object.values(this.intermediateRepresentation.services)) {
+        this.forEachService((service, packageId) => {
             for (const endpoint of service.endpoints) {
                 if (endpoint.requestBody?.type === "inlinedRequestBody") {
                     this.withSourceFile({
                         filepath: this.honoInlinedRequestBodySchemaDeclarationReferencer.getExportedFilepath({
-                            packageId: service.name.fernFilepath.packagePath,
-                            endpoint: endpoint.name
+                            packageId,
+                            endpoint
                         }),
                         run: ({ sourceFile, importsManager }) => {
                             const context = this.generateHonoContext({
@@ -415,22 +415,22 @@ export class HonoGenerator {
                                 importsManager
                             });
                             context.honoInlinedRequestBodySchema
-                                .getGeneratedInlinedRequestBodySchema(service.name.fernFilepath.packagePath, endpoint.name)
-                                .writeSchemaToFile(context);
+                                .getGeneratedInlinedRequestBodySchema(packageId, endpoint.name)
+                                .writeToFile(context);
                         }
                     });
                 }
             }
-        }
+        });
     }
 
     private generateEndpointTypeSchemas() {
-        for (const service of Object.values(this.intermediateRepresentation.services)) {
+        this.forEachService((service, packageId) => {
             for (const endpoint of service.endpoints) {
                 this.withSourceFile({
                     filepath: this.honoEndpointSchemaDeclarationReferencer.getExportedFilepath({
-                        packageId: service.name.fernFilepath.packagePath,
-                        endpoint: endpoint.name
+                        packageId,
+                        endpoint
                     }),
                     run: ({ sourceFile, importsManager }) => {
                         const context = this.generateHonoContext({
@@ -439,33 +439,28 @@ export class HonoGenerator {
                             importsManager
                         });
                         context.honoEndpointTypeSchemas
-                            .getGeneratedEndpointTypeSchemas(service.name.fernFilepath.packagePath, endpoint.name)
+                            .getGeneratedEndpointTypeSchemas(packageId, endpoint.name)
                             .writeToFile(context);
                     }
                 });
             }
-        }
+        });
     }
 
     private generateHonoServices() {
-        for (const [serviceId, service] of Object.entries(this.intermediateRepresentation.services)) {
+        this.forEachService((_service, packageId) => {
             this.withSourceFile({
-                filepath: this.honoServiceDeclarationReferencer.getExportedFilepath({
-                    serviceId,
-                    service
-                }),
+                filepath: this.honoServiceDeclarationReferencer.getExportedFilepath(packageId),
                 run: ({ sourceFile, importsManager }) => {
                     const context = this.generateHonoContext({
                         logger: this.context.logger,
                         sourceFile,
                         importsManager
                     });
-                    context.honoService
-                        .getGeneratedHonoService(service.name.fernFilepath.packagePath)
-                        .writeToFile(context);
+                    context.honoService.getGeneratedHonoService(packageId).writeToFile(context);
                 }
             });
-        }
+        });
     }
 
     private generateHonoRegister() {
@@ -477,7 +472,7 @@ export class HonoGenerator {
                     sourceFile,
                     importsManager
                 });
-                context.honoRegister.getGeneratedHonoRegister().writeToFile(context);
+                context.honoRegister.getGeneratedHonoRegister()?.writeToFile(context);
             }
         });
     }
@@ -522,14 +517,14 @@ export class HonoGenerator {
                         sourceFile,
                         importsManager
                     });
-                    context.honoErrorSchema.getGeneratedHonoErrorSchema(errorDeclaration.name).writeSchemaToFile(context);
+                    context.honoErrorSchema.getGeneratedHonoErrorSchema(errorDeclaration.name)?.writeToFile(context);
                 }
             });
         }
     }
 
     private async copyAsIsFiles(): Promise<void> {
-        await this.asIsManager.copyAsIsFiles(this.rootDirectory, this.exportsManager);
+        await this.asIsManager.addToTsProject({ project: this.project });
     }
 
     private withSourceFile({
@@ -539,49 +534,45 @@ export class HonoGenerator {
         filepath: ExportedFilePath;
         run: (args: { sourceFile: SourceFile; importsManager: ImportsManager }) => void;
     }): void {
-        const sourceFile = this.getSourceFile(filepath);
-        const importsManager = new ImportsManager({ sourceFile });
+        const filepathStr = this.exportsManager.convertExportedFilePathToFilePath(filepath);
+        this.context.logger.debug(`Generating ${filepathStr}`);
+
+        const sourceFile = this.rootDirectory.createSourceFile(filepathStr);
+        const importsManager = new ImportsManager({ packagePath: this.config.packagePath });
+
         run({ sourceFile, importsManager });
-        sourceFile.insertStatements(0, FILE_HEADER);
+
+        if (sourceFile.getStatements().length === 0) {
+            sourceFile.delete();
+            this.context.logger.debug(`Skipping ${filepathStr} (no content)`);
+        } else {
+            importsManager.writeImportsToSourceFile(sourceFile);
+            this.exportsManager.addExportsForFilepath(filepath);
+
+            sourceFile.insertText(0, (writer) => {
+                writer.writeLine(FILE_HEADER);
+            });
+
+            this.context.logger.debug(`Generated ${filepathStr}`);
+        }
     }
 
-    private getSourceFile(filepath: ExportedFilePath): SourceFile {
-        const directories = this.getDirectoriesForExportedFilepath(filepath);
-        const filename = filepath.file.nameOnDisk;
-        return directories.addSourceFile(filename);
+    private getAllPackageIds(): PackageId[] {
+        return [
+            { isRoot: true },
+            ...Object.keys(this.intermediateRepresentation.subpackages).map(
+                (subpackageId): PackageId => ({ isRoot: false, subpackageId })
+            )
+        ];
     }
 
-    private getDirectoriesForExportedFilepath(exportedFilepath: ExportedFilePath): Directory {
-        let currentDirectory = this.getSrcDirectory();
-        for (const exportedDirectory of exportedFilepath.directories) {
-            currentDirectory = currentDirectory.createDirectory(exportedDirectory.nameOnDisk);
-            const exportDeclaration = exportedDirectory.exportDeclaration;
-            if (exportDeclaration != null) {
-                this.exportsManager.addExport(currentDirectory.getPath(), exportDeclaration);
+    private forEachService(run: (service: HttpService, packageId: PackageId) => void): void {
+        for (const packageId of this.getAllPackageIds()) {
+            const service = this.packageResolver.getServiceDeclaration(packageId);
+            if (service != null) {
+                run(service, packageId);
             }
         }
-        const exportDeclaration = exportedFilepath.file.exportDeclaration;
-        if (exportDeclaration != null) {
-            this.exportsManager.addExport(
-                this.getPathFromSrcToFile({ directories: currentDirectory, filename: exportedFilepath.file.nameOnDisk }),
-                exportDeclaration
-            );
-        }
-        return currentDirectory;
-    }
-
-    private getPathFromSrcToFile({ directories, filename }: { directories: Directory; filename: string }): string {
-        const pathFromRoot = directories.getPath();
-        const srcDirectoryPath = this.getSrcDirectory().getPath();
-        return `${pathFromRoot.slice(srcDirectoryPath.length)}/${filename.replace(/\.ts$/, "")}`;
-    }
-
-    private getSrcDirectory(): Directory {
-        const srcDirectory = this.rootDirectory.getDirectory(this.defaultSrcDirectory);
-        if (srcDirectory != null) {
-            return srcDirectory;
-        }
-        return this.rootDirectory.createDirectory(this.defaultSrcDirectory);
     }
 
     private generateHonoContext({
@@ -610,9 +601,8 @@ export class HonoGenerator {
             honoInlinedRequestBodySchemaDeclarationReferencer: this.honoInlinedRequestBodySchemaDeclarationReferencer,
             honoEndpointSchemaDeclarationReferencer: this.honoEndpointSchemaDeclarationReferencer,
             honoServiceDeclarationReferencer: this.honoServiceDeclarationReferencer,
-            honoRegisterDeclarationReferencer: this.honoRegisterDeclarationReferencer,
-            genericApiHonoErrorDeclarationReferencer: this.genericApiHonoErrorDeclarationReferencer,
-            honoErrorDeclarationReferencer: this.honoErrorDeclarationReferencer,
+            genericAPIHonoErrorDeclarationReferencer: this.genericApiHonoErrorDeclarationReferencer,
+            errorDeclarationReferencer: this.honoErrorDeclarationReferencer,
             honoErrorSchemaDeclarationReferencer: this.honoErrorSchemaDeclarationReferencer,
             jsonDeclarationReferencer: this.jsonDeclarationReferencer,
             typeGenerator: this.typeGenerator,
@@ -623,9 +613,19 @@ export class HonoGenerator {
             honoEndpointTypeSchemasGenerator: this.honoEndpointTypeSchemasGenerator,
             honoServiceGenerator: this.honoServiceGenerator,
             honoRegisterGenerator: this.honoRegisterGenerator,
-            genericApiHonoErrorGenerator: this.genericApiHonoErrorGenerator,
+            genericAPIHonoErrorGenerator: this.genericApiHonoErrorGenerator,
             honoErrorGenerator: this.honoErrorGenerator,
-            honoErrorSchemaGenerator: this.honoErrorSchemaGenerator
+            honoErrorSchemaGenerator: this.honoErrorSchemaGenerator,
+            treatUnknownAsAny: this.config.treatUnknownAsAny,
+            includeSerdeLayer: this.config.includeSerdeLayer,
+            retainOriginalCasing: this.config.retainOriginalCasing,
+            useBigInt: this.config.useBigInt,
+            enableInlineTypes: false,
+            allowExtraFields: this.config.allowExtraFields,
+            omitUndefined: false,
+            relativePackagePath: this.getRelativePackagePath(),
+            relativeTestPath: this.getRelativeTestPath(),
+            generateReadWriteOnlyTypes: false
         });
     }
 
