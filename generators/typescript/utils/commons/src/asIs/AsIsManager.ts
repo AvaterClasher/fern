@@ -13,7 +13,7 @@ export namespace AsIsManager {
         generateWireTests: boolean;
         relativePackagePath: string;
         relativeTestPath: string;
-        generatorType: "sdk" | "model" | "express";
+        generatorType: "sdk" | "model" | "express" | "hono";
         formatter: "prettier" | "biome" | "oxfmt" | "none";
         linter: "biome" | "oxlint" | "none";
     }
@@ -24,7 +24,7 @@ export class AsIsManager {
     private readonly generateWireTests: boolean;
     private readonly relativePackagePath: string;
     private readonly relativeTestPath: string;
-    private readonly generatorType: "sdk" | "model" | "express";
+    private readonly generatorType: "sdk" | "model" | "express" | "hono";
     private readonly formatter: "prettier" | "biome" | "oxfmt" | "none";
     private readonly linter: "biome" | "oxlint" | "none";
 
