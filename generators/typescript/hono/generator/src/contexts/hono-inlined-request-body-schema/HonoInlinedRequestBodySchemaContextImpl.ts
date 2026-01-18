@@ -57,13 +57,13 @@ export class HonoInlinedRequestBodySchemaContextImpl implements HonoInlinedReque
         if (endpoint == null) {
             throw new Error(`Endpoint ${endpointName.originalName} does not exist`);
         }
+        if (endpoint.requestBody?.type !== "inlinedRequestBody") {
+            throw new Error(`Endpoint ${endpointName.originalName} does not have an inlined request body`);
+        }
         return this.honoInlinedRequestBodySchemaGenerator.generateInlinedRequestBodySchema({
             packageId,
             endpoint,
-            typeName: this.honoInlinedRequestBodySchemaDeclarationReferencer.getExportedName({
-                packageId,
-                endpoint
-            })
+            inlinedRequestBody: endpoint.requestBody
         });
     }
 
