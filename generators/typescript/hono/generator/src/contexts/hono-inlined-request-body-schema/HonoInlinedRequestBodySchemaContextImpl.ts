@@ -4,7 +4,7 @@ import {
     HonoInlinedRequestBodySchemaContext,
     GeneratedHonoInlinedRequestBodySchema
 } from "@fern-typescript/contexts";
-import { ExpressInlinedRequestBodySchemaGenerator } from "@fern-typescript/hono-inlined-request-body-schema-generator";
+import { HonoInlinedRequestBodySchemaGenerator } from "@fern-typescript/hono-inlined-request-body-schema-generator";
 import { PackageResolver } from "@fern-typescript/resolvers";
 import { SourceFile } from "ts-morph";
 
@@ -13,7 +13,7 @@ import { getSchemaImportStrategy } from "../getSchemaImportStrategy";
 
 export declare namespace HonoInlinedRequestBodySchemaContextImpl {
     export interface Init {
-        honoInlinedRequestBodySchemaGenerator: ExpressInlinedRequestBodySchemaGenerator;
+        honoInlinedRequestBodySchemaGenerator: HonoInlinedRequestBodySchemaGenerator;
         honoInlinedRequestBodySchemaDeclarationReferencer: HonoInlinedRequestBodyDeclarationReferencer;
         packageResolver: PackageResolver;
         sourceFile: SourceFile;
@@ -23,7 +23,7 @@ export declare namespace HonoInlinedRequestBodySchemaContextImpl {
 }
 
 export class HonoInlinedRequestBodySchemaContextImpl implements HonoInlinedRequestBodySchemaContext {
-    private honoInlinedRequestBodySchemaGenerator: ExpressInlinedRequestBodySchemaGenerator;
+    private honoInlinedRequestBodySchemaGenerator: HonoInlinedRequestBodySchemaGenerator;
     private honoInlinedRequestBodySchemaDeclarationReferencer: HonoInlinedRequestBodyDeclarationReferencer;
     private packageResolver: PackageResolver;
     private sourceFile: SourceFile;

@@ -11,7 +11,7 @@ import { getSchemaImportStrategy } from "../getSchemaImportStrategy";
 export declare namespace HonoEndpointTypeSchemasContextImpl {
     export interface Init {
         honoEndpointTypeSchemasGenerator: HonoEndpointTypeSchemasGenerator;
-        expressEndpointSchemaDeclarationReferencer: EndpointDeclarationReferencer;
+        honoEndpointSchemaDeclarationReferencer: EndpointDeclarationReferencer;
         packageResolver: PackageResolver;
         sourceFile: SourceFile;
         importsManager: ImportsManager;
@@ -22,7 +22,7 @@ export declare namespace HonoEndpointTypeSchemasContextImpl {
 export class HonoEndpointTypeSchemasContextImpl implements HonoEndpointTypeSchemasContext {
     private honoEndpointTypeSchemasGenerator: HonoEndpointTypeSchemasGenerator;
     private packageResolver: PackageResolver;
-    private expressEndpointSchemaDeclarationReferencer: EndpointDeclarationReferencer;
+    private honoEndpointSchemaDeclarationReferencer: EndpointDeclarationReferencer;
     private sourceFile: SourceFile;
     private importsManager: ImportsManager;
     private exportsManager: ExportsManager;
@@ -32,7 +32,7 @@ export class HonoEndpointTypeSchemasContextImpl implements HonoEndpointTypeSchem
         importsManager,
         exportsManager,
         honoEndpointTypeSchemasGenerator,
-        expressEndpointSchemaDeclarationReferencer,
+        honoEndpointSchemaDeclarationReferencer,
         packageResolver
     }: HonoEndpointTypeSchemasContextImpl.Init) {
         this.sourceFile = sourceFile;
@@ -40,7 +40,7 @@ export class HonoEndpointTypeSchemasContextImpl implements HonoEndpointTypeSchem
         this.exportsManager = exportsManager;
         this.packageResolver = packageResolver;
         this.honoEndpointTypeSchemasGenerator = honoEndpointTypeSchemasGenerator;
-        this.expressEndpointSchemaDeclarationReferencer = expressEndpointSchemaDeclarationReferencer;
+        this.honoEndpointSchemaDeclarationReferencer = honoEndpointSchemaDeclarationReferencer;
     }
 
     public getGeneratedEndpointTypeSchemas(
@@ -73,7 +73,7 @@ export class HonoEndpointTypeSchemasContextImpl implements HonoEndpointTypeSchem
         if (endpoint == null) {
             throw new Error(`Endpoint ${endpointName.originalName} does not exist`);
         }
-        return this.expressEndpointSchemaDeclarationReferencer.getReferenceToEndpointExport({
+        return this.honoEndpointSchemaDeclarationReferencer.getReferenceToEndpointExport({
             name: { packageId, endpoint },
             referencedIn: this.sourceFile,
             importsManager: this.importsManager,
