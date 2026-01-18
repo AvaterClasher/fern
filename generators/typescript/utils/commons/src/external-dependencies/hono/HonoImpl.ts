@@ -86,10 +86,8 @@ export class HonoImpl extends ExternalDependency implements Hono {
     );
 
     public readonly CookieOptions = {
-        _getReferenceToType: this.withNamedImport("CookieOptions", (withImport, CookieOptions) =>
-            withImport(() => {
-                return ts.factory.createTypeReferenceNode(ts.factory.createIdentifier(CookieOptions), []);
-            })
-        )
+        _getReferenceToType: () => {
+            return ts.factory.createTypeReferenceNode(ts.factory.createIdentifier("CookieOptions"), []);
+        }
     };
 }

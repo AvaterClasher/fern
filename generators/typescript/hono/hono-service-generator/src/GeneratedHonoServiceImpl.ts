@@ -204,6 +204,9 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
         const COOKIE_VALUE_PARAMETER_NAME = "value";
         const COOKIE_OPTIONS_PARAMETER_NAME = "options";
 
+        // Import CookieOptions from hono/utils/cookie
+        context.importsManager.addImport("hono/utils/cookie", { namedImports: ["CookieOptions"] });
+
         const allPathParameters = [...this.service.pathParameters, ...endpoint.pathParameters];
 
         const method = methodsInterface.addMethod({
@@ -639,7 +642,10 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
                             ts.factory.createVariableDeclaration(
                                 RESPONSE_BODY_VARIABLE,
                                 undefined,
-                                undefined,
+                                ts.factory.createUnionTypeNode([
+                                    this.getResponseBodyType(endpoint.response.body, context),
+                                    ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword)
+                                ]),
                                 ts.factory.createIdentifier("undefined")
                             )
                         ],
@@ -657,7 +663,28 @@ export class GeneratedHonoServiceImpl implements GeneratedHonoService {
                         ts.factory.createVariableDeclaration(
                             COOKIES_VARIABLE,
                             undefined,
-                            undefined,
+                            ts.factory.createArrayTypeNode(
+                                ts.factory.createTypeLiteralNode([
+                                    ts.factory.createPropertySignature(
+                                        undefined,
+                                        "name",
+                                        undefined,
+                                        ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+                                    ),
+                                    ts.factory.createPropertySignature(
+                                        undefined,
+                                        "value",
+                                        undefined,
+                                        ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+                                    ),
+                                    ts.factory.createPropertySignature(
+                                        undefined,
+                                        "options",
+                                        ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+                                        context.externalDependencies.hono.CookieOptions._getReferenceToType()
+                                    )
+                                ])
+                            ),
                             ts.factory.createArrayLiteralExpression([])
                         )
                     ],
