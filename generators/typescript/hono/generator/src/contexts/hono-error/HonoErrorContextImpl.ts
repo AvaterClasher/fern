@@ -1,6 +1,6 @@
 import { DeclaredErrorName, ErrorDeclaration } from "@fern-fern/ir-sdk/api";
 import { ExportsManager, ImportsManager, Reference } from "@fern-typescript/commons";
-import { HonoErrorContext, GeneratedExpressError } from "@fern-typescript/contexts";
+import { HonoErrorContext, GeneratedHonoError } from "@fern-typescript/contexts";
 import { HonoErrorGenerator } from "@fern-typescript/hono-error-generator";
 import { ErrorResolver } from "@fern-typescript/resolvers";
 import { SourceFile } from "ts-morph";
@@ -52,9 +52,9 @@ export class HonoErrorContextImpl implements HonoErrorContext {
         });
     }
 
-    public getGeneratedExpressError(errorName: DeclaredErrorName): GeneratedExpressError {
+    public getGeneratedHonoError(errorName: DeclaredErrorName): GeneratedHonoError {
         return this.honoErrorGenerator.generateError({
-            errorName: this.getErrorClassName(errorName),
+            errorClassName: this.getErrorClassName(errorName),
             errorDeclaration: this.getErrorDeclaration(errorName)
         });
     }

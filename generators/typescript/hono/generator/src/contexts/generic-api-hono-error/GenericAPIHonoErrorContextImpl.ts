@@ -1,5 +1,5 @@
 import { ExportsManager, ImportsManager, Reference } from "@fern-typescript/commons";
-import { GeneratedGenericAPIExpressError, GenericAPIHonoErrorContext } from "@fern-typescript/contexts";
+import { GeneratedGenericAPIHonoError, GenericAPIHonoErrorContext } from "@fern-typescript/contexts";
 import { GenericAPIHonoErrorGenerator } from "@fern-typescript/generic-hono-error-generators";
 import { SourceFile } from "ts-morph";
 
@@ -36,7 +36,7 @@ export class GenericAPIHonoErrorContextImpl implements GenericAPIHonoErrorContex
         this.genericAPIHonoErrorGenerator = genericAPIHonoErrorGenerator;
     }
 
-    public getReferenceToGenericAPIExpressError(): Reference {
+    public getReferenceToGenericAPIHonoError(): Reference {
         return this.genericAPIHonoErrorDeclarationReferencer.getReferenceToError({
             importsManager: this.importsManager,
             exportsManager: this.exportsManager,
@@ -44,8 +44,8 @@ export class GenericAPIHonoErrorContextImpl implements GenericAPIHonoErrorContex
         });
     }
 
-    public getGeneratedGenericAPIExpressError(): GeneratedGenericAPIExpressError {
-        return this.genericAPIHonoErrorGenerator.generateGenericAPIExpressError({
+    public getGeneratedGenericAPIHonoError(): GeneratedGenericAPIHonoError {
+        return this.genericAPIHonoErrorGenerator.generateGenericAPIHonoError({
             errorClassName: this.genericAPIHonoErrorDeclarationReferencer.getExportedName()
         });
     }

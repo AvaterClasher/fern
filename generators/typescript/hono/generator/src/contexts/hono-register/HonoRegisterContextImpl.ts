@@ -1,4 +1,4 @@
-import { HonoRegisterContext, GeneratedExpressRegister } from "@fern-typescript/contexts";
+import { HonoRegisterContext, GeneratedHonoRegister } from "@fern-typescript/contexts";
 import { HonoRegisterGenerator } from "@fern-typescript/hono-register-generator";
 
 export declare namespace HonoRegisterContextImpl {
@@ -14,7 +14,7 @@ export class HonoRegisterContextImpl implements HonoRegisterContext {
         this.honoRegisterGenerator = honoRegisterGenerator;
     }
 
-    public getGeneratedExpressRegister(): GeneratedExpressRegister | undefined {
-        return this.honoRegisterGenerator.generateRegisterFunction();
+    public getGeneratedHonoRegister(): GeneratedHonoRegister | undefined {
+        return this.honoRegisterGenerator.generateRegister();
     }
 }

@@ -1,5 +1,5 @@
 import { ExportsManager, ImportsManager, PackageId, Reference } from "@fern-typescript/commons";
-import { HonoServiceContext, GeneratedExpressService } from "@fern-typescript/contexts";
+import { HonoServiceContext, GeneratedHonoService } from "@fern-typescript/contexts";
 import { HonoServiceGenerator } from "@fern-typescript/hono-service-generator";
 import { PackageResolver } from "@fern-typescript/resolvers";
 import { SourceFile } from "ts-morph";
@@ -41,7 +41,7 @@ export class HonoServiceContextImpl implements HonoServiceContext {
         this.sourceFile = sourceFile;
     }
 
-    public getGeneratedExpressService(packageId: PackageId): GeneratedExpressService {
+    public getGeneratedHonoService(packageId: PackageId): GeneratedHonoService {
         const serviceDeclaration = this.packageResolver.getServiceDeclarationOrThrow(packageId);
         return this.honoServiceGenerator.generateService({
             packageId,
@@ -50,7 +50,7 @@ export class HonoServiceContextImpl implements HonoServiceContext {
         });
     }
 
-    public getReferenceToExpressService(packageId: PackageId, { importAlias }: { importAlias: string }): Reference {
+    public getReferenceToHonoService(packageId: PackageId, { importAlias }: { importAlias: string }): Reference {
         return this.honoServiceDeclarationReferencer.getReferenceToService({
             name: packageId,
             importsManager: this.importsManager,

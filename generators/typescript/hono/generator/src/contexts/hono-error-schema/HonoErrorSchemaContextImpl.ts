@@ -1,6 +1,6 @@
 import { DeclaredErrorName } from "@fern-fern/ir-sdk/api";
 import { CoreUtilities, ExportsManager, ImportsManager, Reference, Zurg } from "@fern-typescript/commons";
-import { HonoErrorSchemaContext, GeneratedExpressErrorSchema } from "@fern-typescript/contexts";
+import { HonoErrorSchemaContext, GeneratedHonoErrorSchema } from "@fern-typescript/contexts";
 import { HonoErrorSchemaGenerator } from "@fern-typescript/hono-error-schema-generator";
 import { ErrorResolver } from "@fern-typescript/resolvers";
 import { SourceFile } from "ts-morph";
@@ -65,14 +65,19 @@ export class HonoErrorSchemaContextImpl implements HonoErrorSchemaContext {
         return this.coreUtilities.zurg.lazy(this.coreUtilities.zurg.Schema._fromExpression(referenceToSchema));
     }
 
-    public getGeneratedExpressErrorSchema(errorName: DeclaredErrorName): GeneratedExpressErrorSchema | undefined {
-        return this.honoErrorSchemaGenerator.generateExpressErrorSchema({
-            errorDeclaration: this.errorResolver.getErrorDeclarationFromName(errorName),
-            errorName: this.honoErrorSchemaDeclarationReferencer.getExportedName(errorName)
+    public getGeneratedHonoErrorSchema(errorName: DeclaredErrorName): GeneratedHonoErrorSchema | undefined {
+        const errorDeclaration = this.errorResolver.getErrorDeclarationFromName(errorName);
+        if (errorDeclaration.type == null) {
+            return undefined;
+        }
+        return this.honoErrorSchemaGenerator.generateErrorSchema({
+            errorDeclaration,
+            errorName: this.honoErrorSchemaDeclarationReferencer.getExportedName(errorName),
+            type: errorDeclaration.type
         });
     }
 
-    public getReferenceToExpressErrorSchema(errorName: DeclaredErrorName): Reference {
+    public getReferenceToHonoErrorSchema(errorName: DeclaredErrorName): Reference {
         return this.honoErrorSchemaDeclarationReferencer.getReferenceToError({
             name: errorName,
             importStrategy: getSchemaImportStrategy({ useDynamicImport: false }),
