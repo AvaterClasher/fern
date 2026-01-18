@@ -1,30 +1,31 @@
-import { HttpEndpoint } from "@fern-fern/ir-sdk/api";
-import { PackageId } from "@fern-typescript/commons";
+import { InlinedRequestBody } from "@fern-fern/ir-sdk/api";
 import { GeneratedHonoInlinedRequestBody } from "@fern-typescript/contexts";
 
 import { GeneratedHonoInlinedRequestBodyImpl } from "./GeneratedHonoInlinedRequestBodyImpl";
 
 export declare namespace HonoInlinedRequestBodyGenerator {
-    export interface Init {}
-
     export namespace generateInlinedRequestBody {
         export interface Args {
-            packageId: PackageId;
-            endpoint: HttpEndpoint;
+            requestBody: InlinedRequestBody;
+            typeName: string;
+            retainOriginalCasing: boolean;
+            includeSerdeLayer: boolean;
         }
     }
 }
 
 export class HonoInlinedRequestBodyGenerator {
-    constructor(init: HonoInlinedRequestBodyGenerator.Init) {}
-
     public generateInlinedRequestBody({
-        packageId,
-        endpoint
+        requestBody,
+        typeName,
+        retainOriginalCasing,
+        includeSerdeLayer
     }: HonoInlinedRequestBodyGenerator.generateInlinedRequestBody.Args): GeneratedHonoInlinedRequestBody {
         return new GeneratedHonoInlinedRequestBodyImpl({
-            packageId,
-            endpoint
+            requestBody,
+            typeName,
+            retainOriginalCasing,
+            includeSerdeLayer
         });
     }
 }

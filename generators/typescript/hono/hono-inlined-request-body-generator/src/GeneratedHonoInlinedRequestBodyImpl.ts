@@ -1,11 +1,12 @@
-import { HttpEndpoint } from "@fern-fern/ir-sdk/api";
-import { PackageId } from "@fern-typescript/commons";
+import { InlinedRequestBody } from "@fern-fern/ir-sdk/api";
 import { GeneratedHonoInlinedRequestBody, HonoContext } from "@fern-typescript/contexts";
 
 export declare namespace GeneratedHonoInlinedRequestBodyImpl {
     export interface Init {
-        packageId: PackageId;
-        endpoint: HttpEndpoint;
+        requestBody: InlinedRequestBody;
+        typeName: string;
+        retainOriginalCasing: boolean;
+        includeSerdeLayer: boolean;
     }
 }
 
